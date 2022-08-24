@@ -3,12 +3,11 @@
 namespace ChristianKuri\LaravelFavorite\Test;
 
 use Illuminate\Database\Schema\Blueprint;
-use Orchestra\Testbench\TestCase as OrchestraTestCase;
-use ChristianKuri\LaravelFavorite\FavoriteServiceProvider;
-use ChristianKuri\LaravelFavorite\Models\Favorite;
-use ChristianKuri\LaravelFavorite\Test\Models\Article;
 use ChristianKuri\LaravelFavorite\Test\Models\Post;
 use ChristianKuri\LaravelFavorite\Test\Models\User;
+use ChristianKuri\LaravelFavorite\Test\Models\Article;
+use Orchestra\Testbench\TestCase as OrchestraTestCase;
+use ChristianKuri\LaravelFavorite\FavoriteServiceProvider;
 
 abstract class TestCase extends OrchestraTestCase
 {
@@ -42,9 +41,9 @@ abstract class TestCase extends OrchestraTestCase
         $app['config']->set('database.default', 'sqlite');
 
         $app['config']->set('database.connections.sqlite', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => $this->getTempDirectory().'/database.sqlite',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
 
         if (starts_with($app->version(), '5.1')) {

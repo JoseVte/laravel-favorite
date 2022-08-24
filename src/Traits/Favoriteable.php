@@ -2,16 +2,16 @@
 
 namespace ChristianKuri\LaravelFavorite\Traits;
 
-use ChristianKuri\LaravelFavorite\Models\Favorite;
 use Illuminate\Support\Facades\Auth;
+use ChristianKuri\LaravelFavorite\Models\Favorite;
 
 /**
- * This file is part of Laravel Favorite,
+ * This file is part of Laravel Favorite,.
  *
  * @license MIT
- * @package ChristianKuri/laravel-favorite
  *
- * Copyright (c) 2016 Christian Kuri
+ * @property \Illuminate\Database\Eloquent\Collection favorites
+ * @property int favoritesCount
  */
 trait Favoriteable
 {
@@ -26,9 +26,9 @@ trait Favoriteable
     }
 
     /**
-     * Add this Object to the user favorites
-     * 
-     * @param  int $user_id  [if  null its added to the auth user]
+     * Add this Object to the user favorites.
+     *
+     * @param int $user_id [if  null it's added to the auth user]
      */
     public function addFavorite($user_id = null)
     {
@@ -37,10 +37,9 @@ trait Favoriteable
     }
 
     /**
-     * Remove this Object from the user favorites
+     * Remove this Object from the user favorites.
      *
-     * @param  int $user_id  [if  null its added to the auth user]
-     * 
+     * @param int $user_id [if  null it's added to the auth user]
      */
     public function removeFavorite($user_id = null)
     {
@@ -48,50 +47,68 @@ trait Favoriteable
     }
 
     /**
-     * Toggle the favorite status from this Object
-     * 
-     * @param  int $user_id  [if  null its added to the auth user]
+     * Toggle the favorite status from this Object.
+     *
+     * @param int $user_id [if  null its added to the auth user]
      */
     public function toggleFavorite($user_id = null)
     {
-        $this->isFavorited($user_id) ? $this->removeFavorite($user_id) : $this->addFavorite($user_id) ;
+        $this->isFavorited($user_id) ? $this->removeFavorite($user_id) : $this->addFavorite($user_id);
     }
 
     /**
-     * Check if the user has favorited this Object
-     * 
-     * @param  int $user_id  [if  null its added to the auth user]
-     * @return boolean
+     * Check if the user has favorited this Object.
+     *
+     * @param int $user_id [if  null it's added to the auth user]
+     *
+     * @return bool
      */
     public function isFavorited($user_id = null)
     {
-        return $this->favorites()->where('user_id', ($user_id) ? $user_id : Auth::id())->exists();
+        $user_id = ($user_id) ? $user_id : Auth::id();
+        if ($this->relationLoaded('favorites')) {
+            return $this->favorites->contains('user_id', $user_id);
+        }
+
+        return $this->favorites()->where('user_id', $user_id)->exists();
     }
 
     /**
      * Return a collection with the Users who marked as favorite this Object.
-     * 
-     * @return Collection
+     *
+     * @return \Illuminate\Support\Collection
      */
     public function favoritedBy()
     {
-        return $this->favorites()->with('user')->get()->mapWithKeys(function ($item) {
+        if ($this->relationLoaded('favorites')) {
+            $favoritesCollection = $this->favorites->load('user');
+        } else {
+            $favoritesCollection = $this->favorites()->with('user')->get();
+        }
+
+        return $favoritesCollection->mapWithKeys(function ($item) {
             return [$item['user']->id => $item['user']];
         });
     }
 
     /**
-     * Count the number of favorites
-     * 
+     * Count the number of favorites.
+     *
      * @return int
      */
     public function getFavoritesCountAttribute()
     {
+        if ($this->relationLoaded('favorites')) {
+            return $this->favorites->count();
+        }
+
         return $this->favorites()->count();
     }
 
     /**
-     * @return favoritesCount attribute
+     * Count the number of favorites.
+     *
+     * @return int
      */
     public function favoritesCount()
     {
@@ -99,9 +116,7 @@ trait Favoriteable
     }
 
     /**
-     * Add deleted observer to delete favorites registers
-     * 
-     * @return void
+     * Add deleted observer to delete favorites registers.
      */
     public static function bootFavoriteable()
     {
@@ -111,5 +126,4 @@ trait Favoriteable
             }
         );
     }
-
 }

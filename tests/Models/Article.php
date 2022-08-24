@@ -2,13 +2,13 @@
 
 namespace ChristianKuri\LaravelFavorite\Test\Models;
 
-use ChristianKuri\LaravelFavorite\Traits\Favoriteable;
 use Illuminate\Database\Eloquent\Model;
+use ChristianKuri\LaravelFavorite\Traits\Favoriteable;
 
 class Article extends Model
 {
-   use Favoriteable;
-   
-   protected $table = 'articles';
-   protected $guarded = [];
+    use Favoriteable;
+
+    protected $table = 'articles';
+    protected $guarded = [];
 }

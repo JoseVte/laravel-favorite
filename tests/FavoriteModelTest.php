@@ -2,15 +2,14 @@
 
 namespace ChristianKuri\LaravelFavorite\Test;
 
-use ChristianKuri\LaravelFavorite\Test\Models\Article;
 use ChristianKuri\LaravelFavorite\Test\Models\Post;
 use ChristianKuri\LaravelFavorite\Test\Models\User;
-use ChristianKuri\LaravelFavorite\Models\Favorite;
+use ChristianKuri\LaravelFavorite\Test\Models\Article;
 
 class FavoriteModelTest extends TestCase
 {
     /** @test */
-    public function models_can_add_to_favorites_with_auth_user()
+    public function modelsCanAddToFavoritesWithAuthUser()
     {
         $article = Article::first();
         $user = User::first();
@@ -21,14 +20,14 @@ class FavoriteModelTest extends TestCase
         $this->assertDatabaseHas('favorites', [
             'user_id' => $user->id,
             'favoriteable_id' => $article->id,
-            'favoriteable_type' => get_class($article)
+            'favoriteable_type' => get_class($article),
         ]);
 
         $this->assertTrue($article->isFavorited());
     }
 
     /** @test */
-    public function models_can_remove_from_favorites_with_auth_user()
+    public function modelsCanRemoveFromFavoritesWithAuthUser()
     {
         $article = Article::first();
         $user = User::first();
@@ -39,14 +38,14 @@ class FavoriteModelTest extends TestCase
         $this->assertDatabaseMissing('favorites', [
             'user_id' => $user->id,
             'favoriteable_id' => $article->id,
-            'favoriteable_type' => get_class($article)
+            'favoriteable_type' => get_class($article),
         ]);
 
         $this->assertFalse($article->isFavorited());
     }
 
     /** @test */
-    public function models_can_toggle_their_favorite_status_with_auth_user()
+    public function modelsCanToggleTheirFavoriteStatusWithAuthUser()
     {
         $article = Article::first();
         $user = User::first();
@@ -62,7 +61,7 @@ class FavoriteModelTest extends TestCase
     }
 
     /** @test */
-    public function models_can_add_to_favorites_without_the_auth_user()
+    public function modelsCanAddToFavoritesWithoutTheAuthUser()
     {
         $post = Post::first();
         $post->addFavorite(2);
@@ -70,14 +69,14 @@ class FavoriteModelTest extends TestCase
         $this->assertDatabaseHas('favorites', [
             'user_id' => 2,
             'favoriteable_id' => $post->id,
-            'favoriteable_type' => get_class($post)
+            'favoriteable_type' => get_class($post),
         ]);
 
         $this->assertTrue($post->isFavorited(2));
     }
 
     /** @test */
-    public function models_can_remove_from_favorites_without_the_auth_user()
+    public function modelsCanRemoveFromFavoritesWithoutTheAuthUser()
     {
         $post = Post::first();
         $post->removeFavorite(2);
@@ -85,14 +84,14 @@ class FavoriteModelTest extends TestCase
         $this->assertDatabaseMissing('favorites', [
             'user_id' => 2,
             'favoriteable_id' => $post->id,
-            'favoriteable_type' => get_class($post)
+            'favoriteable_type' => get_class($post),
         ]);
 
         $this->assertFalse($post->isFavorited(2));
     }
 
     /** @test */
-    public function models_can_toggle_their_favorite_status_without_the_auth_user()
+    public function modelsCanToggleTheirFavoriteStatusWithoutTheAuthUser()
     {
         $post = Post::first();
         $post->toggleFavorite(2);
@@ -105,7 +104,7 @@ class FavoriteModelTest extends TestCase
     }
 
     /** @test */
-    public function user_model_can_add_to_favorites_other_models()
+    public function userModelCanAddToFavoritesOtherModels()
     {
         $user = User::first();
         $article = Article::first();
@@ -115,14 +114,14 @@ class FavoriteModelTest extends TestCase
         $this->assertDatabaseHas('favorites', [
             'user_id' => $user->id,
             'favoriteable_id' => $article->id,
-            'favoriteable_type' => get_class($article)
+            'favoriteable_type' => get_class($article),
         ]);
 
         $this->assertTrue($user->hasFavorited($article));
     }
 
     /** @test */
-    public function user_model_can_remove_from_favorites_another_models()
+    public function userModelCanRemoveFromFavoritesAnotherModels()
     {
         $user = User::first();
         $article = Article::first();
@@ -132,14 +131,14 @@ class FavoriteModelTest extends TestCase
         $this->assertDatabaseMissing('favorites', [
             'user_id' => $user->id,
             'favoriteable_id' => $article->id,
-            'favoriteable_type' => get_class($article)
+            'favoriteable_type' => get_class($article),
         ]);
 
         $this->assertFalse($user->isFavorited($article));
     }
 
     /** @test */
-    public function user_model_can_toggle_his_favorite_models()
+    public function userModelCanToggleHisFavoriteModels()
     {
         $user = User::first();
         $article = Article::first();
@@ -154,7 +153,7 @@ class FavoriteModelTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_return_his_favorited_models()
+    public function aUserCanReturnHisFavoritedModels()
     {
         $user = User::first();
 
@@ -187,7 +186,7 @@ class FavoriteModelTest extends TestCase
     }
 
     /** @test */
-    public function a_model_knows_how_many_users_have_favorited_him()
+    public function aModelKnowsHowManyUsersHaveFavoritedHim()
     {
         $article = Article::first();
 
@@ -205,7 +204,7 @@ class FavoriteModelTest extends TestCase
     }
 
     /** @test */
-    public function a_model_knows_which_users_have_favorited_him()
+    public function aModelKnowsWhichUsersHaveFavoritedHim()
     {
         $article = Article::first();
 
@@ -223,7 +222,7 @@ class FavoriteModelTest extends TestCase
     }
 
     /** @test */
-    public function a_user_not_return_favorites_deleteds()
+    public function aUserNotReturnFavoritesDeleteds()
     {
         $user = User::first();
 
@@ -239,7 +238,7 @@ class FavoriteModelTest extends TestCase
     }
 
     /** @test */
-    public function a_model_delete_favorites_on_deleted_observer()
+    public function aModelDeleteFavoritesOnDeletedObserver()
     {
         $user = User::find(1);
         $user2 = User::find(2);
@@ -253,7 +252,7 @@ class FavoriteModelTest extends TestCase
             'favorites', [
                 'user_id' => $user->id,
                 'favoriteable_id' => $article->id,
-                'favoriteable_type' => get_class($article)
+                'favoriteable_type' => get_class($article),
             ]
         );
 
@@ -261,7 +260,7 @@ class FavoriteModelTest extends TestCase
             'favorites', [
                 'user_id' => $user2->id,
                 'favoriteable_id' => $article->id,
-                'favoriteable_type' => get_class($article)
+                'favoriteable_type' => get_class($article),
             ]
         );
 
@@ -271,7 +270,7 @@ class FavoriteModelTest extends TestCase
             'favorites', [
                 'user_id' => $user->id,
                 'favoriteable_id' => $article->id,
-                'favoriteable_type' => get_class($article)
+                'favoriteable_type' => get_class($article),
             ]
         );
 
@@ -279,7 +278,7 @@ class FavoriteModelTest extends TestCase
             'favorites', [
                 'user_id' => $user2->id,
                 'favoriteable_id' => $article->id,
-                'favoriteable_type' => get_class($article)
+                'favoriteable_type' => get_class($article),
             ]
         );
     }

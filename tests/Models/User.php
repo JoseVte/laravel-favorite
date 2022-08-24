@@ -2,9 +2,9 @@
 
 namespace ChristianKuri\LaravelFavorite\Test\Models;
 
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use ChristianKuri\LaravelFavorite\Traits\Favoriteability;
 use Illuminate\Database\Eloquent\Model;
+use ChristianKuri\LaravelFavorite\Traits\Favoriteability;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
 class User extends Model implements AuthenticatableContract
 {

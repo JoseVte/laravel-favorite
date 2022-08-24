@@ -2,13 +2,13 @@
 
 namespace ChristianKuri\LaravelFavorite\Test\Models;
 
-use ChristianKuri\LaravelFavorite\Traits\Favoriteable;
 use Illuminate\Database\Eloquent\Model;
+use ChristianKuri\LaravelFavorite\Traits\Favoriteable;
 
 class Post extends Model
 {
-   use Favoriteable;
+    use Favoriteable;
 
-   protected $table = 'posts';
-   protected $guarded = [];
+    protected $table = 'posts';
+    protected $guarded = [];
 }
